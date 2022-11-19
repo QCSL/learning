@@ -1,0 +1,188 @@
+# 1.基本操作
+## 导入块
+import matplotlib.pyplot as plt
+import numpy as np
+## 定义函数
+x=np.linspace(-3,3,100)
+y1=2*x+1
+y2=x**2
+
+## xy显示范围
+plt.xlim(-1,2)
+plt.ylim(-2,3)
+
+## 颜色、宽度、线条类型
+plt.plot(x,y1,color='red',linewidth=1.0,linestyle='--')
+plt.plot(x,y2,color='blue',linewidth=5.0,linestyle='-')
+
+## xy表示什么
+plt.xlabel('I am x')
+plt.ylabel('I am y')
+
+## 创建点
+new_ticks=np.linspace(-2,2,11)
+plt.xticks(new_ticks)
+plt.yticks([-1,0,1,2,3],['level1','level2','level3','level4','level5'])
+
+## 设置坐标轴颜色
+ax=plt.gca()
+ax.spines['right'].set_color('red')
+ax.spines['top'].set_color('green')
+
+## 设置xy刻度位置
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
+
+## xy坐标轴位置在哪里
+ax.spines['bottom'].set_position(('data',0))
+ax.spines['left'].set_position(('data',0))
+
+## 设置图例
+l1,=plt.plot(x,y1,color='red',linewidth=1.0,linestyle='--')
+l2,=plt.plot(x,y2,color='blue',linewidth=5.0,linestyle='-')
+plt.legend(labels=['test1','test2'],loc='best')
+
+## 标注小箭头，虚线等等
+x0=0.5
+y0=2*x0+1
+## 画点
+plt.scatter(x0,y0,color='purple',s=40)
+## 画虚线
+plt.plot([x0,x0],[y0,0],'k--',lw=2)
+plt.annotate(r'$2x+1=%s$'%y0,xy=(x0,y0),xytext=(+30,-30),textcoords='offset points',
+             fontsize=16,arrowprops=dict(arrowstyle='->',connectionstyle='arc3,rad=0.2'))
+plt.text(-1,2,r'$this\ is\ the\ text$',fontdict={'size':'16','color':'red'})
+
+plt.show()
+
+
+
+
+# 2.散点图
+import matplotlib.pyplot as plt
+import numpy as np
+
+## 生成点
+x=np.random.normal(-1,1,500)
+y=np.random.normal(-1,1,500)
+plt.scatter(x,y,s=50,color='blue',alpha=0.5)
+plt.show()
+
+
+
+
+# 3.条形图
+import matplotlib.pyplot as plt
+import numpy as np
+
+x=np.arange(10)
+y=2**x+10
+
+## 柱子颜色和柱子边框颜色
+plt.bar(x,y,facecolor='#9999ff',edgecolor='white')
+
+## zip组合x，y
+for x,y in zip(x,y):
+    plt.text(x,y,'%.2f'%y,ha='center',va='bottom')
+    
+plt.show()
+
+
+
+# 4.等高线图
+import matplotlib.pyplot as plt
+import numpy as np
+
+## 定义函数
+def f(x,y):
+    return(1-x/2+x**5+y**3)*np.exp(-x**2-y**2)
+x=np.linspace(-3,3,100)
+y=np.linspace(-3,3,100)
+
+## 画网格 8为等高线数，alpha为透明度，cmap为颜色
+X,Y=np.meshgrid(x,y)
+plt.contourf(X,Y,f(X,Y),8,alpha=0.75,cmap=plt.cm.hot)
+
+#等高线inline为true数字在线里，false在线外
+C=plt.contour(X,Y,f(X,Y),8,colors='black',lw=.5)
+plt.clabel(C,inline=True,fontsize=10)
+
+plt.xticks(())
+plt.yticks(())
+plt.show()
+
+
+
+# 5.三维图
+## 导入三维块
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+
+fig=plt.figure()
+ax=Axes3D(fig)
+
+x=np.arange(-4,4,0.25)
+y=np.arange(-4,4,0.25)
+X,Y=np.meshgrid(x,y)
+R=np.sqrt(X**2+Y**2)
+Z=np.sin(R)
+
+## 设置颜色，stride为两个方向的方块大小
+ax.plot_surface(X,Y,Z,rstride=1,cstride=1,cmap=plt.get_cmap('rainbow'))
+## 设置等高线图，映射方向，在-2处投影
+ax.contourf(X,Y,Y,zdir='z',offset=-2,cmap='rainbow')
+ax.set_zlim(-2,2)
+
+plt.show()
+
+
+
+# 6.位置图
+import matplotlib.pyplot as plt
+import numpy as np
+
+## subplot的数字表示第几行第几列第几个元素，第几个图，改变数字可改变 排列
+fig=plt.figure()
+plt.subplot(2,1,1)
+plt.plot([0,1],[0,1])
+
+plt.subplot(2,3,4)
+plt.plot([0,1],[0,1])
+
+plt.subplot(2,3,5)
+plt.plot([0,1],[0,1])
+
+plt.subplot(236)
+plt.plot([0,1],[0,1])
+
+plt.show()
+
+
+
+# 7.动态图
+## 导入块
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import animation
+
+fig,ax=plt.subplots()
+
+## 定义x和曲线
+x=np.arange(0,2*np.pi,0.01)
+line,=ax.plot(x,np.sin(x))
+
+## 定义函数
+def animate(i):
+    line.set_ydate(np.sin(x+i/10))
+    return line,
+def init():
+    line.set_ydate(np.sin(x))
+    return line,
+
+## 函数初始化，20毫秒
+ani=animation.FuncAnimation(fig=fig,func=animate,init_func=init,interval=20)
+
+plt.show()
+# 8.ipython
+## 三维图和等高线图在ipython看的效果更好，shift加tab可以看指令
