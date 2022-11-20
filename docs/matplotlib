@@ -120,7 +120,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
 fig=plt.figure()
-ax=Axes3D(fig)
+ax= plt.axes(projection='3d')
 
 x=np.arange(-4,4,0.25)
 y=np.arange(-4,4,0.25)
