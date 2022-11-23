@@ -1,0 +1,220 @@
+#axis=1是列左右，axis=0是上下行
+#导入块
+import pandas as pd
+im numpy as np
+
+#给一个列表默认float
+s=pd.Series([1,3,6,np.nan,44,1])
+
+#桉顺序输出日期
+dates=pd.date_range('20221122',periods=6)
+
+#行索引index，列索引columns
+dates=pd.date_range('20221122',periods=6)
+df=pd.DateFrame(np.random.randn(6,4),index=datas,columns=['a','b','c','d'])
+
+#直接生成，默认0123做横纵坐标
+df1=pd.DataFrame(np.arange(12).reshape((3,4)))
+
+#用字典定义，输出ABCDEF对应的内容表格
+df2=pd.DataFrame({'A':1.,
+			  'B':pd.Timestamp('20130102'),
+			  'C':pd.Series(1,index=list(range(4)),dtype='float32'),
+			  'D':np.array([3]*4,dtype='int32'),
+			  'E':pd.Categorical(["test","train","test","train"]),
+			  'F':'fool'})
+df2.dtypes
+#输出所有列序号行序号
+df2.index#列
+df2.columns#行
+#输出每一行的内容
+df2.values
+
+#输出数据describe只能运算数字的
+df2.describe()
+
+#类似于矩阵的转置
+df2.T
+
+#排序，axis=1列排序axis=0行排序
+df2.sort_index(axis=1,ascending=False)
+
+#给单行数排序
+df2.sort_values(by='E')
+
+#选择数据
+dates=pd.date_range('20221122',periods=6)
+df=pd.DataFrame(np.arange(24).reshape((6,4)),index=datas,columns=['a','b','c','d'])
+#选择A列
+df['A']
+df.A
+#选择0到3行
+df[0:3]
+df['20221122':'20221125']
+
+#用标签选择
+df.loc['20221122']
+df.loc[:,['A','B']]
+df.loc['20221122',['A','B']]
+#用位置选择数据
+df.iloc[3]
+df.iloc[3,1]
+df.iloc[3:5,1:3]
+df.iloc[[1,3,5],1:3]
+
+#标签位置一起筛选
+df.ix[:3,['A','C']]#被弃用
+
+#选择大于8的数据，别的对应也会显示
+df.[df.A>8]
+
+#改变某个位置数值
+dates=pd.date_range('20221122',periods=6)
+df=pd.DataFrame(np.arange(24).reshape((6,4)),index=datas,columns=['a','b','c','d'])
+df.iloc[2,2]=1111
+df.loc['20221123','b']=2222
+
+#大于4的部分及其同行都为0
+df[df.a>4]=0
+#只改变a列的数值
+df.a[df.a>4]=0
+#只改变a列的数值
+df.b[df.a>4]=0
+
+#加一列f
+df['f']=np.nan
+df['e']=pd.Series([1,2,3,4,5,6],index=pd.date_range('20130101',periods=6))
+
+#处理没有数据的数据模块
+dates=pd.date_range('20221122',periods=6)
+df=pd.DataFrame(np.arange(24).reshape((6,4)),index=datas,columns=['a','b','c','d'])
+df.iloc[0,1]=np.nan
+df.iloc[1,2]=np.nan
+
+#有一个nan就删除行或者列，根据axis，0行1列
+print(df.dropna(axis=0,how='any'))#how={'any','all'}
+#把nan填写为0
+df.fillna(value=0)
+
+#判断数据是否缺失
+df.isnull()
+#判断是否有缺失，有一个就为True
+np.any(df.isnull())==True#没有==True
+
+#导入导出数据
+read_格式   #读取
+to_格式       #保存
+import pandas as pd
+date=pd.read_csv('student.csv')
+data.to_pickle('student.pickle')
+
+#合并
+import pandas as pd
+import numpy as np
+df1=pd.DateFrame(np.ones((3,4))*0,columns=['a','b','c','d'])
+df2=pd.DateFrame(np.ones((3,4))*1,columns=['a','b','c','d'])
+df3=pd.DateFrame(np.ones((3,4))*2,columns=['a','b','c','d'])
+#上下合并
+pd.concat([df1,df2,df3],axis=0)
+#忽略索引的合并
+pd.concat([df1,df2,df3],axis=0,ignore_index=True)#ignore_index=1
+
+#join,['inner','outer']
+df1=pd.DateFrame(np.ones((3,4))*0,columns=['a','b','c','d'],index[1,2,3])
+df2=pd.DateFrame(np.ones((3,4))*1,columns=['b,'c','d','e'],index=[2,3,4])
+
+#用nan填充默认outer
+pd.concat([df1,df2]，join='outer')
+
+#合并相同的，别的舍掉
+pd.concat([df1,df2]，join='inter'，ignore_index=True)
+
+#按照谁的坐标合并join_axes，join-axes被移除了，用reindex_like()
+df1=pd.DateFrame(np.ones((3,4))*0,columns=['a','b','c','d'],index[1,2,3])
+df2=pd.DateFrame(np.ones((3,4))*1,columns=['b,'c','d','e'],index=[2,3,4])
+pd.concat([df1,df2],axis=1,join_axes=[df1.index])
+pd.concat([df1, df2.reindex_like(df1)], axis=1)
+
+#append
+df1=pd.DateFrame(np.ones((3,4))*0,columns=['a','b','c','d'])
+df2=pd.DateFrame(np.ones((3,4))*1,columns=['a','b','c','d'])
+df3=pd.DateFrame(np.ones((3,4))*1,columns=['a','b','c','d'])
+res=df1.append(df2,ignore_index=True)#往下加
+res=df1.append([df2,df3],ignore_index=True)#加两个
+s1=pd.Series([1,2,3,4],index=['a','b','c','d'])
+res=df1.append(s1,ignore_index=True)#添加一个元素
+
+#merge
+import pandas as pd
+left=pd.DateFrame({'key':['K0','K1','K2','K3'],
+			'A':['A0','A1','A2','A3'],
+			'B':['B0','B1','B2','B3']})
+right=pd.DateFrame({'key':['K0','K1','K2','K3'],
+			'C':['C0','C1','C2','C3'],
+			'D'}:['D0','D1','D2','D3']})
+res=pd.merge(left,right,on='key')
+
+#两个key
+left = pd.DataFrame({'key1': ['K0', 'K0', 'K1', 'K2'],
+                             'key2': ['K0', 'K1', 'K0', 'K1'],
+                             'A': ['A0', 'A1', 'A2', 'A3'],
+                             'B': ['B0', 'B1', 'B2', 'B3']})
+right = pd.DataFrame({'key1': ['K0', 'K1', 'K1', 'K2'],
+                              'key2': ['K0', 'K0', 'K0', 'K0'],
+                              'C': ['C0', 'C1', 'C2', 'C3'],
+                              'D': ['D0', 'D1', 'D2', 'D3']})
+res=pd.merge(left,right,on=['key1','key2',how='inner'])#默认how=inner
+#how=['left','right','outer','inner']
+#inner找相同的，outer直接接上，没有的用nan，left以左边连接为准，right以右边连接为准
+
+# indicator显示哪边可以连接
+df1 = pd.DataFrame({'col1':[0,1], 'col_left':['a','b']})
+df2 = pd.DataFrame({'col1':[1,2,2],'col_right':[2,2,2]})
+res = pd.merge(df1, df2, on='col1', how='outer', indicator=True)
+#改个名字
+res = pd.merge(df1, df2, on='col1', how='outer', indicator='indicator_column')
+
+# merged by index
+left = pd.DataFrame({'A': ['A0', 'A1', 'A2'],
+                                  'B': ['B0', 'B1', 'B2']},
+                                  index=['K0', 'K1', 'K2'])
+right = pd.DataFrame({'C': ['C0', 'C2', 'C3'],
+                                     'D': ['D0', 'D2', 'D3']},
+                                      index=['K0', 'K2', 'K3'])
+res = pd.merge(left, right, left_index=True, right_index=True, how='outer')
+res = pd.merge(left, right, left_index=True, right_index=True, how='inner')
+
+# suffixes分辨如果和表合并的过程中遇到有一列两个表都同名，但是值不同，合并的时候又都想保留下来，就可以用suffixes给每个表的重复列名增加后缀。
+boys = pd.DataFrame({'k': ['K0', 'K1', 'K2'], 'age': [1, 2, 3]})
+girls = pd.DataFrame({'k': ['K0', 'K0', 'K3'], 'age': [4, 5, 6]})
+res = pd.merge(boys, girls, on='k', suffixes=['_boy', '_girl'], how='inner')
+print(res)
+
+#join
+In [59]: left = pd.DataFrame({'A': ['A0', 'A1', 'A2', 'A3'],
+   ....:                      'B': ['B0', 'B1', 'B2', 'B3'],
+   ....:                      'key': ['K0', 'K1', 'K0', 'K1']})
+   ....: 
+
+In [60]: right = pd.DataFrame({'C': ['C0', 'C1'],
+   ....:                       'D': ['D0', 'D1']},
+   ....:                       index=['K0', 'K1'])
+res=left.join(right,on='key')
+
+#画图
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+#线性数据
+data=pd.Series(np.random.randn(1000),index=np.arange(1000))
+#生成的数据进行累加
+dete=data.cumsum()
+
+#DataFrame
+data=pd.DataFrame(np.random.randn(1000,4),index=np.arange(1000),columns=list("ABCD"))
+print(data.head())#默认显示五个
+data=data.cumsum()
+ax=data.plot.scatter(x='A',y='B',color='DarkBlue',label='Class 1')
+data.plot.scatter(x='A',y='B',color='Darkgreen',label='Class 2',ax=ax)
+data.plot()
+plt.show()
